@@ -8,23 +8,35 @@ require('dotenv').config();
 
 const app = express();
 
+// Log environment variables (without sensitive data)
+console.log('Environment check:', {
+    port: process.env.PORT,
+    mongoUri: process.env.MONGODB_URI ? 'MongoDB URI is set' : 'MongoDB URI is missing',
+    jwtSecret: process.env.JWT_SECRET ? 'JWT Secret is set' : 'JWT Secret is missing'
+});
+
 // Middleware
 app.use(cors()); // Enable CORS for all routes
 app.use(express.json());
 app.use(express.static('public'));
 
-// Test route
+// Test route to verify server is running
 app.get('/api/test', (req, res) => {
+    console.log('Test endpoint hit');
     res.json({ message: 'Server is running!' });
 });
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => console.log('Connected to MongoDB'))
-.catch(err => console.error('MongoDB connection error:', err));
+// MongoDB connection with detailed logging
+mongoose.connect(process.env.MONGODB_URI)
+    .then(() => {
+        console.log('MongoDB connected successfully');
+        console.log('Database name:', mongoose.connection.db.databaseName);
+        console.log('Host:', mongoose.connection.host);
+    })
+    .catch(err => {
+        console.error('MongoDB connection error:', err);
+        console.error('Connection string:', process.env.MONGODB_URI.replace(/:[^@]+@/, ':****@'));
+    });
 
 // Authentication Middleware
 const auth = async (req, res, next) => {
@@ -48,40 +60,60 @@ const auth = async (req, res, next) => {
 // Routes
 // Register
 app.post('/api/register', async (req, res) => {
+    console.log('Registration request received');
+    console.log('Request body:', { ...req.body, password: '****' });
+    
     try {
         const { username, email, password } = req.body;
+        console.log('Registration data:', { username, email });
         
         // Validate input
         if (!username || !email || !password) {
+            console.log('Missing required fields');
             return res.status(400).json({ error: 'All fields are required' });
         }
 
-        // Check if user already exists
+        // Check if user exists with detailed logging
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(400).json({ error: 'Email already registered' });
+            console.log('Registration failed: Email already exists');
+            return res.status(400).json({ message: 'Email already registered' });
         }
 
-        // Create new user
-        const user = new User({ username, email, password });
+        // Create user with detailed logging
+        console.log('Creating new user');
+        const user = new User({
+            username,
+            email,
+            password: hashedPassword,
+            role: 'user'
+        });
+
         await user.save();
-        
-        // Generate token
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-        
-        // Send response
-        res.status(201).json({ 
+        console.log('User created successfully');
+
+        // Generate token with detailed logging
+        console.log('Generating JWT token');
+        const token = jwt.sign(
+            { userId: user._id, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+        console.log('Token generated successfully');
+
+        res.status(201).json({
             message: 'Registration successful',
+            token,
             user: {
                 id: user._id,
                 username: user.username,
-                email: user.email
-            },
-            token 
+                email: user.email,
+                role: user.role
+            }
         });
     } catch (error) {
         console.error('Registration error:', error);
-        res.status(400).json({ error: error.message });
+        res.status(500).json({ message: 'Registration failed', error: error.message });
     }
 });
 
@@ -217,12 +249,13 @@ app.get('/api/leaderboard', async (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-    console.error(err.stack);
+    console.error('Global error handler:', err);
     res.status(500).json({ error: 'Something went wrong!' });
 });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
+    console.log(`Server URL: https://cybersecurity-qasu.onrender.com`);
 });
 
