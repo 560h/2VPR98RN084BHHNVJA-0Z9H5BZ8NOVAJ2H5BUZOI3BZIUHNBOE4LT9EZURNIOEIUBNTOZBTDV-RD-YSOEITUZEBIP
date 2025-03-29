@@ -9,24 +9,11 @@ require('dotenv').config();
 const app = express();
 
 // Middleware
-app.use(cors({
-    origin: '*', // Allow all origins
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
-    credentials: false,
-    maxAge: 86400 // 24 hours
-}));
-
-// Add error handling middleware
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ error: 'Something went wrong!' });
-});
-
+app.use(cors()); // Enable CORS for all routes
 app.use(express.json());
 app.use(express.static('public'));
 
-// Add a test route to verify server is running
+// Test route
 app.get('/api/test', (req, res) => {
     res.json({ message: 'Server is running!' });
 });
@@ -62,7 +49,6 @@ const auth = async (req, res, next) => {
 // Register
 app.post('/api/register', async (req, res) => {
     try {
-        console.log('Registration request received:', req.body);
         const { username, email, password } = req.body;
         
         // Validate input
@@ -227,6 +213,12 @@ app.get('/api/leaderboard', async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ error: 'Something went wrong!' });
 });
 
 const PORT = process.env.PORT || 3000;
