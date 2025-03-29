@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - CyberSec Academy</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00ff00;
+            --accent-color: #00cc00;
+            --background-color: #0a0a0a;
+            --card-background: #1a1a1a;
+            --text-color: #ffffff;
+            --terminal-border: #333333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background: rgba(10, 10, 10, 0.95);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--terminal-border);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--primary-color);
+        }
+
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            background: var(--background-color);
+        }
+
+        .auth-card {
+            background: var(--card-background);
+            border: 1px solid var(--terminal-border);
+            border-radius: 10px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 5px 15px rgba(0, 255, 0, 0.1);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .auth-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .auth-title {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--background-color);
+            border: 1px solid var(--terminal-border);
+            border-radius: 5px;
+            color: var(--text-color);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.1);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 35px;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        .password-toggle:hover {
+            color: var(--primary-color);
+        }
+
+        .password-strength {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .strength-bar {
+            height: 4px;
+            background: var(--terminal-border);
+            border-radius: 2px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .strength-bar-fill {
+            height: 100%;
+            width: 0;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+
+        .strength-weak { background-color: #ff4444; }
+        .strength-medium { background-color: #ffbb33; }
+        .strength-strong { background-color: #00C851; }
+
+        .auth-button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-color);
+            color: var(--background-color);
+            border: none;
+            border-radius: 5px;
+            font-family: 'JetBrains Mono', monospace;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .auth-button:hover {
+            background: var(--accent-color);
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .auth-switch button {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            text-decoration: underline;
+        }
+
+        .auth-switch button:hover {
+            color: var(--accent-color);
+        }
+
+        .error-message {
+            color: #ff4444;
+            text-align: center;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .terms-checkbox {
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .terms-checkbox input[type="checkbox"] {
+            width: auto;
+        }
+
+        .terms-checkbox label {
+            font-size: 0.9rem;
+        }
+
+        .terms-checkbox a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .terms-checkbox a:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 480px) {
+            .auth-container {
+                padding: 1rem;
+            }
+
+            .auth-card {
+                padding: 1.5rem;
+            }
+
+            .auth-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <span>CyberSec Academy</span>
+            </div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="/learning-paths.html">Learning Paths</a></li>
+                <li><a href="/tutorials.html">Tutorials</a></li>
+                <li><a href="/challenges.html">Challenges</a></li>
+                <li><a href="/login.html" class="auth-button">Login</a></li>
+                <li><a href="/register.html" class="auth-button active">Register</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <i class="fas fa-shield-alt auth-icon"></i>
+                <h1 class="auth-title">Join Our Community</h1>
+            </div>
+
+            <div class="error-message" id="error-message"></div>
+
+            <form class="auth-form" id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required>
+                    <i class="fas fa-eye password-toggle" onclick="togglePassword('login-password')"></i>
+                </div>
+                <button type="submit" class="auth-button">Login</button>
+                <div class="auth-switch">
+                    <p>Don't have an account? <button type="button" id="show-register">Register</button></p>
+                </div>
+            </form>
+
+            <form class="auth-form show" id="register-form">
+                <div class="form-group">
+                    <label for="register-username">Username</label>
+                    <input type="text" id="register-username" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Password</label>
+                    <input type="password" id="register-password" required onkeyup="checkPasswordStrength()">
+                    <i class="fas fa-eye password-toggle" onclick="togglePassword('register-password')"></i>
+                    <div class="password-strength" id="password-strength"></div>
+                    <div class="strength-bar">
+                        <div class="strength-bar-fill" id="strength-bar-fill"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" required onkeyup="checkPasswordMatch()">
+                    <i class="fas fa-eye password-toggle" onclick="togglePassword('confirm-password')"></i>
+                </div>
+                <div class="terms-checkbox">
+                    <input type="checkbox" id="terms" required>
+                    <label for="terms">I agree to the <a href="/terms.html" target="_blank">Terms of Service</a></label>
+                </div>
+                <button type="submit" class="auth-button">Register</button>
+                <div class="auth-switch">
+                    <p>Already have an account? <button type="button" id="show-login">Login</button></p>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                    <li><a href="terms.html">Terms of Service</a></li>
+                    <li><a href="code-of-conduct.html">Code of Conduct</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Connect</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 CyberSec Academy. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Form switching
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const showRegisterBtn = document.getElementById('show-register');
+        const showLoginBtn = document.getElementById('show-login');
+        const errorMessage = document.getElementById('error-message');
+
+        showRegisterBtn.addEventListener('click', () => {
+            loginForm.classList.remove('show');
+            registerForm.classList.add('show');
+            errorMessage.classList.remove('show');
+        });
+
+        showLoginBtn.addEventListener('click', () => {
+            registerForm.classList.remove('show');
+            loginForm.classList.add('show');
+            errorMessage.classList.remove('show');
+        });
+
+        // Password visibility toggle
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.nextElementSibling;
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Password strength checker
+        function checkPasswordStrength() {
+            const password = document.getElementById('register-password').value;
+            const strengthBar = document.getElementById('strength-bar-fill');
+            const strengthText = document.getElementById('password-strength');
+            let strength = 0;
+
+            // Length check
+            if (password.length >= 8) strength += 1;
+
+            // Contains number
+            if (/\d/.test(password)) strength += 1;
+
+            // Contains lowercase letter
+            if (/[a-z]/.test(password)) strength += 1;
+
+            // Contains uppercase letter
+            if (/[A-Z]/.test(password)) strength += 1;
+
+            // Contains special character
+            if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+
+            // Update strength bar and text
+            switch(strength) {
+                case 0:
+                    strengthBar.style.width = '0%';
+                    strengthBar.className = 'strength-bar-fill';
+                    strengthText.textContent = 'Very Weak';
+                    break;
+                case 1:
+                    strengthBar.style.width = '20%';
+                    strengthBar.className = 'strength-bar-fill strength-weak';
+                    strengthText.textContent = 'Weak';
+                    break;
+                case 2:
+                    strengthBar.style.width = '40%';
+                    strengthBar.className = 'strength-bar-fill strength-weak';
+                    strengthText.textContent = 'Fair';
+                    break;
+                case 3:
+                    strengthBar.style.width = '60%';
+                    strengthBar.className = 'strength-bar-fill strength-medium';
+                    strengthText.textContent = 'Good';
+                    break;
+                case 4:
+                    strengthBar.style.width = '80%';
+                    strengthBar.className = 'strength-bar-fill strength-medium';
+                    strengthText.textContent = 'Strong';
+                    break;
+                case 5:
+                    strengthBar.style.width = '100%';
+                    strengthBar.className = 'strength-bar-fill strength-strong';
+                    strengthText.textContent = 'Very Strong';
+                    break;
+            }
+        }
+
+        // Password match checker
+        function checkPasswordMatch() {
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const errorMessage = document.getElementById('error-message');
+
+            if (password !== confirmPassword) {
+                errorMessage.textContent = 'Passwords do not match';
+                errorMessage.classList.add('show');
+            } else {
+                errorMessage.classList.remove('show');
+            }
+        }
+
+        // Form submission
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('token', data.token);
+                    window.location.href = '/';
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                errorMessage.textContent = error.message;
+                errorMessage.classList.add('show');
+            }
+        });
+
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('register-username').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            if (password !== confirmPassword) {
+                errorMessage.textContent = 'Passwords do not match';
+                errorMessage.classList.add('show');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('token', data.token);
+                    window.location.href = '/';
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                errorMessage.textContent = error.message;
+                errorMessage.classList.add('show');
+            }
+        });
+    </script>
+</body>
+</html> 
