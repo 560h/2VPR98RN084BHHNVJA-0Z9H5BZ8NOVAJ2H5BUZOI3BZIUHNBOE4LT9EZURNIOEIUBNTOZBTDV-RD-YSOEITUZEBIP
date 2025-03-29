@@ -487,17 +487,32 @@
             const password = document.getElementById('register-password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
 
+            // Basic validation
+            if (!username || !email || !password || !confirmPassword) {
+                errorMessage.textContent = 'All fields are required';
+                errorMessage.classList.add('show');
+                return;
+            }
+
             if (password !== confirmPassword) {
                 errorMessage.textContent = 'Passwords do not match';
                 errorMessage.classList.add('show');
                 return;
             }
 
+            // Password strength validation
+            const strength = checkPasswordStrength(password);
+            if (strength < 3) {
+                errorMessage.textContent = 'Password is too weak. Please use a stronger password.';
+                errorMessage.classList.add('show');
+                return;
+            }
+
             try {
+                console.log('Attempting registration with:', { username, email });
                 const response = await fetch('https://cybersec-academy.onrender.com/api/register', {
                     method: 'POST',
                     mode: 'cors',
-                    credentials: 'include',
                     headers: { 
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
@@ -505,20 +520,25 @@
                     body: JSON.stringify({ username, email, password })
                 });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+                console.log('Response status:', response.status);
+                console.log('Response headers:', Object.fromEntries(response.headers.entries()));
 
                 let data;
                 try {
                     data = await response.json();
+                    console.log('Response data:', data);
                 } catch (e) {
-                    console.error('Response parsing error:', e);
+                    console.error('Error parsing response:', e);
                     throw new Error('Invalid server response');
+                }
+
+                if (!response.ok) {
+                    throw new Error(data.error || `Registration failed with status: ${response.status}`);
                 }
 
                 if (data.token) {
                     localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
                     window.location.href = 'index.html';
                 } else {
                     throw new Error('No authentication token received');
@@ -527,6 +547,64 @@
                 console.error('Registration error:', error);
                 errorMessage.textContent = error.message || 'Registration failed. Please try again.';
                 errorMessage.classList.add('show');
+            }
+        });
+
+        // Password strength checker
+        function checkPasswordStrength(password) {
+            let strength = 0;
+            
+            // Length check
+            if (password.length >= 8) strength += 1;
+            
+            // Contains number
+            if (/\d/.test(password)) strength += 1;
+            
+            // Contains lowercase letter
+            if (/[a-z]/.test(password)) strength += 1;
+            
+            // Contains uppercase letter
+            if (/[A-Z]/.test(password)) strength += 1;
+            
+            // Contains special character
+            if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+            
+            return strength;
+        }
+
+        // Update password strength UI
+        document.getElementById('register-password').addEventListener('input', function() {
+            const password = this.value;
+            const strength = checkPasswordStrength(password);
+            const strengthBar = document.getElementById('strength-bar-fill');
+            const strengthText = document.getElementById('password-strength');
+            
+            // Update strength bar
+            strengthBar.style.width = `${(strength / 5) * 100}%`;
+            strengthBar.className = 'strength-bar-fill';
+            
+            if (strength <= 2) {
+                strengthBar.classList.add('strength-weak');
+                strengthText.textContent = 'Weak';
+            } else if (strength <= 3) {
+                strengthBar.classList.add('strength-medium');
+                strengthText.textContent = 'Medium';
+            } else {
+                strengthBar.classList.add('strength-strong');
+                strengthText.textContent = 'Strong';
+            }
+        });
+
+        // Password match checker
+        document.getElementById('confirm-password').addEventListener('input', function() {
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = this.value;
+            
+            if (password !== confirmPassword) {
+                errorMessage.textContent = 'Passwords do not match';
+                errorMessage.classList.add('show');
+            } else {
+                errorMessage.classList.remove('show');
             }
         });
 
@@ -539,7 +617,6 @@
                 const response = await fetch('https://cybersec-academy.onrender.com/api/login', {
                     method: 'POST',
                     mode: 'cors',
-                    credentials: 'include',
                     headers: { 
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
@@ -548,17 +625,12 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
                 }
 
-                let data;
-                try {
-                    data = await response.json();
-                } catch (e) {
-                    console.error('Response parsing error:', e);
-                    throw new Error('Invalid server response');
-                }
-
+                const data = await response.json();
+                
                 if (data.token) {
                     localStorage.setItem('token', data.token);
                     window.location.href = 'index.html';
