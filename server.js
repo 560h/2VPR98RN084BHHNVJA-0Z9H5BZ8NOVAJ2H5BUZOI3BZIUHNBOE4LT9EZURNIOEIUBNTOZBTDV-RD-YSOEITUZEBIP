@@ -10,13 +10,26 @@ const app = express();
 
 // Middleware
 app.use(cors({
-    origin: '*', // Allow all origins during development
+    origin: '*', // Allow all origins
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
-    credentials: true
+    credentials: false,
+    maxAge: 86400 // 24 hours
 }));
+
+// Add error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ error: 'Something went wrong!' });
+});
+
 app.use(express.json());
 app.use(express.static('public'));
+
+// Add a test route to verify server is running
+app.get('/api/test', (req, res) => {
+    res.json({ message: 'Server is running!' });
+});
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI, {
@@ -49,13 +62,39 @@ const auth = async (req, res, next) => {
 // Register
 app.post('/api/register', async (req, res) => {
     try {
+        console.log('Registration request received:', req.body);
         const { username, email, password } = req.body;
+        
+        // Validate input
+        if (!username || !email || !password) {
+            return res.status(400).json({ error: 'All fields are required' });
+        }
+
+        // Check if user already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ error: 'Email already registered' });
+        }
+
+        // Create new user
         const user = new User({ username, email, password });
         await user.save();
         
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-        res.status(201).json({ user, token });
+        // Generate token
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+        
+        // Send response
+        res.status(201).json({ 
+            message: 'Registration successful',
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email
+            },
+            token 
+        });
     } catch (error) {
+        console.error('Registration error:', error);
         res.status(400).json({ error: error.message });
     }
 });
@@ -64,15 +103,39 @@ app.post('/api/register', async (req, res) => {
 app.post('/api/login', async (req, res) => {
     try {
         const { email, password } = req.body;
-        const user = await User.findOne({ email });
         
-        if (!user || !(await user.comparePassword(password))) {
-            throw new Error('Invalid login credentials');
+        // Validate input
+        if (!email || !password) {
+            return res.status(400).json({ error: 'All fields are required' });
         }
-        
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-        res.json({ user, token });
+
+        // Find user
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+        // Check password
+        const isMatch = await user.comparePassword(password);
+        if (!isMatch) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+        // Generate token
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+
+        // Send response
+        res.json({
+            message: 'Login successful',
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email
+            },
+            token
+        });
     } catch (error) {
+        console.error('Login error:', error);
         res.status(400).json({ error: error.message });
     }
 });
@@ -169,4 +232,5 @@ app.get('/api/leaderboard', async (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
-}); 
+});
+
