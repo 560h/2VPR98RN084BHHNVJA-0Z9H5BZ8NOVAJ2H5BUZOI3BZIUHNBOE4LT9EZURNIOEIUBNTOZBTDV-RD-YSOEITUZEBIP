@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberSec Academy - Learn Cybersecurity</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00ff00;
+            --accent-color: #00cc00;
+            --background-color: #0a0a0a;
+            --card-background: #1a1a1a;
+            --text-color: #ffffff;
+            --terminal-border: #333333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        header {
+            background: rgba(10, 10, 10, 0.95);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--terminal-border);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--primary-color);
+        }
+
+        .auth-button {
+            background: var(--primary-color);
+            color: var(--background-color);
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .auth-button:hover {
+            background: var(--accent-color);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                        url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--primary-color);
+            color: var(--background-color);
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            background: var(--accent-color);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 5rem 2rem;
+            background: var(--background-color);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--primary-color);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--card-background);
+            padding: 2rem;
+            border-radius: 10px;
+            border: 1px solid var(--terminal-border);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        /* Learning Paths Section */
+        .learning-paths {
+            padding: 5rem 2rem;
+            background: var(--card-background);
+            display: none; /* Hidden by default */
+        }
+
+        .learning-paths.show {
+            display: block;
+        }
+
+        .paths-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .path-card {
+            background: var(--background-color);
+            padding: 2rem;
+            border-radius: 10px;
+            border: 1px solid var(--terminal-border);
+            transition: transform 0.3s ease;
+        }
+
+        .path-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .path-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 5rem 2rem;
+            background: var(--background-color);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 2rem;
+            background: var(--card-background);
+            border-radius: 10px;
+            border: 1px solid var(--terminal-border);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--card-background);
+            padding: 3rem 2rem 1rem;
+            border-top: 1px solid var(--terminal-border);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-color);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            font-size: 1.5rem;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--terminal-border);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Matrix Rain Effect */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        /* Login Prompt */
+        .login-prompt {
+            text-align: center;
+            padding: 2rem;
+            background: var(--card-background);
+            border-radius: 10px;
+            margin: 2rem auto;
+            max-width: 600px;
+            border: 1px solid var(--terminal-border);
+        }
+
+        .login-prompt h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .login-prompt p {
+            margin-bottom: 1.5rem;
+        }
+
+        .login-prompt .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <canvas class="matrix-bg"></canvas>
+
+    <header>
+        <nav>
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <span>CyberSec Academy</span>
+            </div>
+            <ul>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#learning-paths">Learning Paths</a></li>
+                <li><a href="#tutorials">Tutorials</a></li>
+                <li><a href="#challenges">Challenges</a></li>
+                <li><a href="/login.html" class="auth-button">Login</a></li>
+                <li><a href="/register.html" class="auth-button">Register</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Master Cybersecurity</h1>
+            <p>Learn ethical hacking, network security, and web security through interactive tutorials and hands-on challenges.</p>
+            <a href="/register.html" class="cta-button">Start Learning</a>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <h2 class="section-title">Why Choose Us</h2>
+        <div class="features-grid">
+            <div class="feature-card" data-aos="fade-up">
+                <i class="fas fa-laptop-code feature-icon"></i>
+                <h3>Interactive Learning</h3>
+                <p>Learn by doing with our hands-on labs and real-world scenarios.</p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                <i class="fas fa-shield-alt feature-icon"></i>
+                <h3>Expert Guidance</h3>
+                <p>Learn from industry professionals with years of experience.</p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                <i class="fas fa-trophy feature-icon"></i>
+                <h3>Certification</h3>
+                <p>Earn certificates as you complete learning paths and challenges.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="learning-paths" class="learning-paths">
+        <h2 class="section-title">Learning Paths</h2>
+        <div class="login-prompt" id="login-prompt">
+            <h3>Access Learning Paths</h3>
+            <p>Create an account or log in to access our comprehensive learning paths and start your cybersecurity journey.</p>
+            <div class="cta-buttons">
+                <a href="/register.html" class="cta-button">Register Now</a>
+                <a href="/login.html" class="cta-button">Login</a>
+            </div>
+        </div>
+        <div class="paths-grid" id="paths-grid" style="display: none;">
+            <div class="path-card" data-aos="fade-up">
+                <i class="fas fa-terminal path-icon"></i>
+                <h3>Beginner Path</h3>
+                <p>Start your journey with Linux basics and networking fundamentals.</p>
+                <a href="/learning-paths.html" class="cta-button">Start Learning</a>
+            </div>
+            <div class="path-card" data-aos="fade-up" data-aos-delay="100">
+                <i class="fas fa-globe path-icon"></i>
+                <h3>Web Security</h3>
+                <p>Master web application security and common vulnerabilities.</p>
+                <a href="/learning-paths.html" class="cta-button">Start Learning</a>
+            </div>
+            <div class="path-card" data-aos="fade-up" data-aos-delay="200">
+                <i class="fas fa-network-wired path-icon"></i>
+                <h3>Network Security</h3>
+                <p>Learn about network protocols, scanning, and security tools.</p>
+                <a href="/learning-paths.html" class="cta-button">Start Learning</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="stats" class="stats">
+        <div class="stats-grid">
+            <div class="stat-item" data-aos="fade-up">
+                <div class="stat-number">1000+</div>
+                <p>Active Students</p>
+            </div>
+            <div class="stat-item" data-aos="fade-up" data-aos-delay="100">
+                <div class="stat-number">50+</div>
+                <p>Learning Modules</p>
+            </div>
+            <div class="stat-item" data-aos="fade-up" data-aos-delay="200">
+                <div class="stat-number">95%</div>
+                <p>Success Rate</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+                    <li><a href="/terms.html">Terms of Service</a></li>
+                    <li><a href="/code-of-conduct.html">Code of Conduct</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Connect</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 CyberSec Academy. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true
+        });
+
+        // Check authentication status
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            const loginPrompt = document.getElementById('login-prompt');
+            const pathsGrid = document.getElementById('paths-grid');
+
+            if (token) {
+                loginPrompt.style.display = 'none';
+                pathsGrid.style.display = 'grid';
+            } else {
+                loginPrompt.style.display = 'block';
+                pathsGrid.style.display = 'none';
+            }
+        }
+
+        // Matrix rain effect
+        const canvas = document.querySelector('.matrix-bg');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペ';
+        const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const nums = '0123456789';
+        const alphabet = katakana + latin + nums;
+
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+
+        const rainDrops = [];
+
+        for (let i = 0; i < columns; i++) {
+            rainDrops[i] = 1;
+        }
+
+        function draw() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#0F0';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
+            }
+        }
+
+        setInterval(draw, 30);
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Check auth status on page load
+        checkAuth();
+    </script>
+</body>
+</html> 
