@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code of Conduct - CyberSec Academy</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00ff00;
+            --accent-color: #00cc00;
+            --background-color: #0a0a0a;
+            --card-background: #1a1a1a;
+            --text-color: #ffffff;
+            --terminal-border: #333333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background: rgba(10, 10, 10, 0.95);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--terminal-border);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--primary-color);
+        }
+
+        .conduct-container {
+            max-width: 800px;
+            margin: 100px auto 50px;
+            padding: 2rem;
+            background: var(--card-background);
+            border-radius: 10px;
+            border: 1px solid var(--terminal-border);
+        }
+
+        .conduct-container h1 {
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .conduct-container h2 {
+            color: var(--primary-color);
+            margin: 2rem 0 1rem;
+        }
+
+        .conduct-container p {
+            margin-bottom: 1rem;
+        }
+
+        .conduct-container ul {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .conduct-container li {
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            background: var(--card-background);
+            padding: 3rem 2rem 1rem;
+            border-top: 1px solid var(--terminal-border);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-color);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            font-size: 1.5rem;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--terminal-border);
+        }
+
+        @media (max-width: 768px) {
+            .conduct-container {
+                margin: 80px 1rem 30px;
+                padding: 1rem;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <span>CyberSec Academy</span>
+            </div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="terms.html">Terms of Service</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="conduct-container">
+        <h1>Code of Conduct</h1>
+
+        <h2>1. Ethical Hacking Principles</h2>
+        <p>As members of CyberSec Academy, we commit to:</p>
+        <ul>
+            <li>Only perform security testing with explicit permission</li>
+            <li>Never attempt to harm or compromise systems without authorization</li>
+            <li>Report vulnerabilities responsibly through proper channels</li>
+            <li>Respect privacy and confidentiality of others</li>
+            <li>Use knowledge gained for defensive and educational purposes</li>
+        </ul>
+
+        <h2>2. Community Guidelines</h2>
+        <p>Our community thrives on mutual respect and collaboration. We expect members to:</p>
+        <ul>
+            <li>Be respectful and professional in all interactions</li>
+            <li>Help others learn and grow in their cybersecurity journey</li>
+            <li>Share knowledge responsibly and ethically</li>
+            <li>Maintain a positive and inclusive environment</li>
+            <li>Report any violations of this code of conduct</li>
+        </ul>
+
+        <h2>3. Academic Integrity</h2>
+        <p>To maintain the value of our certifications and learning paths:</p>
+        <ul>
+            <li>Complete challenges and assessments independently</li>
+            <li>Do not share solutions or answers with others</li>
+            <li>Report any cheating or academic dishonesty</li>
+            <li>Take pride in your genuine achievements</li>
+            <li>Help others learn without giving direct answers</li>
+        </ul>
+
+        <h2>4. Consequences of Violations</h2>
+        <p>Violations of this code may result in:</p>
+        <ul>
+            <li>Warning or temporary suspension</li>
+            <li>Permanent account termination</li>
+            <li>Revocation of certifications</li>
+            <li>Legal action if applicable</li>
+        </ul>
+
+        <h2>5. Reporting</h2>
+        <p>If you witness or experience any violations:</p>
+        <ul>
+            <li>Report immediately to our moderation team</li>
+            <li>Provide detailed information about the incident</li>
+            <li>Maintain confidentiality of the reporting process</li>
+            <li>Cooperate with any resulting investigations</li>
+        </ul>
+
+        <h2>6. Contact</h2>
+        <p>For questions about this Code of Conduct or to report violations, please contact us at:</p>
+        <p>Email: conduct@cybersecacademy.com</p>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                    <li><a href="terms.html">Terms of Service</a></li>
+                    <li><a href="code-of-conduct.html">Code of Conduct</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Connect</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 CyberSec Academy. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
